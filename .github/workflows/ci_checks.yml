@@ -1,0 +1,25 @@
+name: Test with Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_with_docker:
+    runs-on: ubuntu-latest
+    container:
+      image: jackb001/ci_image-dev:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Black
+        run: black --check .
+
+      - name: Run Flake8
+        run: flake8 .
+
