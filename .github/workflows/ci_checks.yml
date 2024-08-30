@@ -18,11 +18,38 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Black
-        run: black --check . || true
+        id: run_black
+        run: |
+          black --check .
+        continue-on-error: true
 
-      - name: Run Pylint  
-        run: pylint *.py || true
+      - name: Run Pylint
+        id: run_pylint
+        run: |
+          pylint *.py
+        continue-on-error: true
 
       - name: Run Flake8
-        run: flake8 . || true
+        id: run_flake8
+        run: |
+          flake8 .
+        continue-on-error: true
 
+      - name: Evaluate Results
+        run: |
+          if [ "${{ steps.run_black.outcome }}" != "success" ]; then
+            echo "Black failed"
+            exit 1
+          fi
+
+          if [ "${{ steps.run_pylint.outcome }}" != "success" ]; then
+            echo "Pylint failed"
+            exit 1
+          fi
+
+          if [ "${{ steps.run_flake8.outcome }}" != "success" ]; then
+            echo "Flake8 failed"
+            exit 1
+          fi
+
+          
