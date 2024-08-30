@@ -1,2 +1,2 @@
 print("whitepace to follow                        ")
-# this is a newline 
+# this is a newline
